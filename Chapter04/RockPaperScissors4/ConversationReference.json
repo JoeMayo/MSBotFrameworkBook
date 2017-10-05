@@ -1,0 +1,15 @@
+{
+  "user": {
+    "id": "default-user",
+    "name": "User"
+  },
+  "bot": {
+    "id": "jn125aajg2ljbg4gc",
+    "name": "Bot"
+  },
+  "conversation": {
+    "id": "35hn6jf29di2"
+  },
+  "channelId": "emulator",
+  "serviceUrl": "http://localhost:31750"
+}

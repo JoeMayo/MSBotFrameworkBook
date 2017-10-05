@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WineBotDialogStack", "WineBotDialogStack\WineBotDialogStack.csproj", "{38918D93-CB67-45D2-B288-F3FB8D6A5E06}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WineBotLib", "WineBotLib\WineBotLib.csproj", "{8C17E8F5-B657-4ED7-A3B7-F9C6982870C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WineBotChain", "WineBotChain\WineBotChain.csproj", "{9970BFA1-EDAB-4CAC-A45A-39560AC76608}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScorableHelp", "ScorableHelp\ScorableHelp.csproj", "{5C19D3D4-8D2E-4E71-A763-529A5CD4B26F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WineBotFormatted", "WineBotFormatted\WineBotFormatted.csproj", "{C1B5946D-8260-4090-A045-7C039E83B56D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{38918D93-CB67-45D2-B288-F3FB8D6A5E06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38918D93-CB67-45D2-B288-F3FB8D6A5E06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38918D93-CB67-45D2-B288-F3FB8D6A5E06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38918D93-CB67-45D2-B288-F3FB8D6A5E06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C17E8F5-B657-4ED7-A3B7-F9C6982870C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C17E8F5-B657-4ED7-A3B7-F9C6982870C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C17E8F5-B657-4ED7-A3B7-F9C6982870C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C17E8F5-B657-4ED7-A3B7-F9C6982870C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9970BFA1-EDAB-4CAC-A45A-39560AC76608}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9970BFA1-EDAB-4CAC-A45A-39560AC76608}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9970BFA1-EDAB-4CAC-A45A-39560AC76608}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9970BFA1-EDAB-4CAC-A45A-39560AC76608}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C19D3D4-8D2E-4E71-A763-529A5CD4B26F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C19D3D4-8D2E-4E71-A763-529A5CD4B26F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C19D3D4-8D2E-4E71-A763-529A5CD4B26F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C19D3D4-8D2E-4E71-A763-529A5CD4B26F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1B5946D-8260-4090-A045-7C039E83B56D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1B5946D-8260-4090-A045-7C039E83B56D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1B5946D-8260-4090-A045-7C039E83B56D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1B5946D-8260-4090-A045-7C039E83B56D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
