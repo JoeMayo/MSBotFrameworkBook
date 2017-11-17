@@ -22,40 +22,57 @@ namespace WineBot3
 
         public async Task<Refinement[]> GetWineCategoriesAsync()
         {
-            const int WineTypeID = 4;
-            string url = BaseUrl + "categorymap?filter=categories(490+4)&apikey=" + ApiKey;
+            return new Refinement[]
+            {
+                new Refinement { Name = "Red Wine" },
+                new Refinement { Name = "White Wine" },
+                new Refinement { Name = "Champagne And Sparkling" },
+                new Refinement { Name = "Rose Wine" },
+                new Refinement { Name = "Dessert, Sherry, and Port" },
+                new Refinement { Name = "Sake" },
+            };
 
-            string result = await http.GetStringAsync(url);
+            //const int WineTypeID = 4;
+            //string url = BaseUrl + "categorymap?filter=categories(490+4)&apikey=" + ApiKey;
 
-            var wineCategories = JsonConvert.DeserializeObject<WineCategories>(result);
+            //string result = await http.GetStringAsync(url);
 
-            var categories =
-                (from cat in wineCategories.Categories
-                    where cat.Id == WineTypeID
-                    from attr in cat.Refinements
-                    where attr.Id != WineTypeID
-                    select attr)
-                .ToArray();
+            //var wineCategories = JsonConvert.DeserializeObject<WineCategories>(result);
 
-            return categories;
+            //var categories =
+            //    (from cat in wineCategories.Categories
+            //     where cat.Id == WineTypeID
+            //     from attr in cat.Refinements
+            //     where attr.Id != WineTypeID
+            //     select attr)
+            //    .ToArray();
+
+            //return categories;
         }
 
         public async Task<List[]> SearchAsync(int wineCategory, long rating, bool inStock, string searchTerms)
         {
-            string url =
-                $"{BaseUrl}catalog" +
-                $"?filter=categories({wineCategory})" +
-                $"+rating({rating}|100)" +
-                $"&inStock={inStock.ToString().ToLower()}" +
-                $"&apikey={ApiKey}";
+            var wineList = new List[10];
 
-            if (searchTerms != "none")
-                url += $"&search={Uri.EscapeUriString(searchTerms)}";
+            for (int i = 0; i < 10; i++)
+                wineList[i] = new List { Name = $"Wine Type {i}" };
 
-            string result = await http.GetStringAsync(url);
+            return wineList;
 
-            var wineProducts = JsonConvert.DeserializeObject<WineProducts>(result);
-            return wineProducts?.Products?.List ?? new List[0];
+            //string url = 
+            //    $"{BaseUrl}catalog" +
+            //    $"?filter=categories({wineCategory})" +
+            //    $"+rating({rating}|100)" +
+            //    $"&inStock={inStock.ToString().ToLower()}" +
+            //    $"&apikey={ApiKey}";
+
+            //if (searchTerms != "none")
+            //    url += $"&search={Uri.EscapeUriString(searchTerms)}";
+
+            //string result = await http.GetStringAsync(url);
+
+            //var wineProducts = JsonConvert.DeserializeObject<WineProducts>(result);
+            //return wineProducts?.Products?.List ?? new List[0];
         }
 
         public async Task<byte[]> GetUserImageAsync(string url)
