@@ -13,6 +13,7 @@ namespace MusicChatbot.Dialogs
     public class BrowseDialog : IDialog<object>
     {
         const string DoneCommand = "Done";
+        List<GenreItem> genres = new List<GenreItem>();
 
         public Task StartAsync(IDialogContext context)
         {
@@ -22,9 +23,11 @@ namespace MusicChatbot.Dialogs
 
         Task MessageReceivedAsync(IDialogContext context, IAwaitable<object> result)
         {
-            List<string> genres = new GrooveService().GetGenres();
-            genres.Add("Done");
-            PromptDialog.Choice(context, ResumeAfterGenreAsync, genres, "Which music category?");
+            genres = new SpotifyService().GetGenres();
+            genres.Add(new GenreItem { Id = "Done", Name = "Done" });
+            var genreNames = genres.Select(genre => genre.Name).ToList().ToList();
+
+            PromptDialog.Choice(context, ResumeAfterGenreAsync, genreNames, "Which music category?");
             return Task.CompletedTask;
         }
 
@@ -60,14 +63,20 @@ namespace MusicChatbot.Dialogs
 
         List<HeroCard> GetHeroCardsForTracks(string genre)
         {
-            List<Item> tracks = new GrooveService().GetTracks(genre);
+            var genreID =
+                (from genreItem in genres
+                 where genreItem.Name == genre
+                 select genreItem.Id)
+                .SingleOrDefault();
+
+            List<Track> tracks = new SpotifyService().GetTracks(genreID);
 
             var cards =
                 (from track in tracks
                  let artists =
                      string.Join(", ",
                         from artist in track.Artists
-                        select artist.Artist.Name)
+                        select artist.Name)
                  select new HeroCard
                  {
                      Title = track.Name,
@@ -78,7 +87,8 @@ namespace MusicChatbot.Dialogs
                          {
                              Alt = track.Name,
                              Tap = BuildBuyCardAction(track),
-                             Url = track.ImageUrl
+                             Url = track.Album.Images.FirstOrDefault()?.Url ?? 
+                                new FileService().GetBinaryUrl("Smile.png")
                          }
                      },
                      Buttons = new List<CardAction>
@@ -90,13 +100,13 @@ namespace MusicChatbot.Dialogs
             return cards;
         }
 
-        CardAction BuildBuyCardAction(Item track)
+        CardAction BuildBuyCardAction(Track track)
         {
             return new CardAction
             {
                 Type = ActionTypes.OpenUrl,
                 Title = "Buy",
-                Value = track.Link
+                Value = track.Uri
             };
         }
 
