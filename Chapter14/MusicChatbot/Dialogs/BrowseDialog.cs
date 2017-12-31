@@ -16,6 +16,7 @@ namespace MusicChatbot.Dialogs
     {
         const string DoneCommand = "Done";
         const string NewsCommand = "News";
+        List<GenreItem> genres = new List<GenreItem>();
 
         public Task StartAsync(IDialogContext context)
         {
@@ -29,8 +30,8 @@ namespace MusicChatbot.Dialogs
             string heroCardValue = activity?.Text;
             if (!string.IsNullOrWhiteSpace(heroCardValue) && heroCardValue.StartsWith("{"))
             {
-                var news = JsonConvert.DeserializeObject<Item>(heroCardValue);
-                string artistName = news.Artists.First().Artist.Name;
+                var news = JsonConvert.DeserializeObject<Track>(heroCardValue);
+                string artistName = news.Artists.First().Name;
                 await context.Forward(
                     new NewsDialog(artistName),
                     MessageReceivedAsync,
@@ -38,9 +39,11 @@ namespace MusicChatbot.Dialogs
             }
             else
             {
-                List<string> genres = new GrooveService().GetGenres();
-                genres.Add("Done");
-                PromptDialog.Choice(context, ResumeAfterGenreAsync, genres, "Which music category?");
+                genres = new SpotifyService().GetGenres();
+                genres.Add(new GenreItem { Id = "Done", Name = "Done" });
+                var genreNames = genres.Select(genre => genre.Name).ToList().ToList();
+
+                PromptDialog.Choice(context, ResumeAfterGenreAsync, genreNames, "Which music category?");
             }
         }
 
@@ -76,19 +79,26 @@ namespace MusicChatbot.Dialogs
 
         async Task<List<HeroCard>> GetHeroCardsForTracksAsync(string genre)
         {
-            List<Item> tracks = new GrooveService().GetTracks(genre);
+            var genreID =
+                (from genreItem in genres
+                 where genreItem.Name == genre
+                 select genreItem.Id)
+                .SingleOrDefault();
+
+            List<Track> tracks = new SpotifyService().GetTracks(genreID);
 
             var cogSvc = new CognitiveService();
 
             foreach (var track in tracks)
-                track.ImageAnalysis = await cogSvc.AnalyzeImageAsync(track.ImageUrl);
+                track.ImageAnalysis = await cogSvc.AnalyzeImageAsync(
+                    track.Album.Images.FirstOrDefault()?.Url ?? new FileService().GetBinaryUrl("Smile.png"));
 
             var cards =
                 (from track in tracks
                  let artists =
                      string.Join(", ",
                         from artist in track.Artists
-                        select artist.Artist.Name)
+                        select artist.Name)
                  select new HeroCard
                  {
                      Title = track.Name,
@@ -100,7 +110,8 @@ namespace MusicChatbot.Dialogs
                          {
                              Alt = track.Name,
                              Tap = BuildBuyCardAction(track),
-                             Url = track.ImageUrl
+                             Url = track.Album.Images.FirstOrDefault()?.Url ??
+                                new FileService().GetBinaryUrl("Smile.png")
                          }
                      },
                      Buttons = new List<CardAction>
@@ -113,17 +124,17 @@ namespace MusicChatbot.Dialogs
             return cards;
         }
 
-        CardAction BuildBuyCardAction(Item track)
+        CardAction BuildBuyCardAction(Track track)
         {
             return new CardAction
             {
                 Type = ActionTypes.OpenUrl,
                 Title = "Buy",
-                Value = track.Link
+                Value = track.Uri
             };
         }
 
-        CardAction BuildNewsCardAction(Item track)
+        CardAction BuildNewsCardAction(Track track)
         {
             return new CardAction
             {

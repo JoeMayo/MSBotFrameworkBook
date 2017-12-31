@@ -94,7 +94,7 @@ namespace MusicChatbot.Dialogs
             string values = activity.Value?.ToString();
             var searchArgs = JsonConvert.DeserializeObject<SearchArguments>(values);
 
-            var results = new GrooveService().Search(searchArgs);
+            var results = new SpotifyService().Search(searchArgs);
 
             context.Done(this);
         }
@@ -105,23 +105,18 @@ namespace MusicChatbot.Dialogs
             {
                 new Choice
                 {
-                    Title = "artists",
-                    Value = "artists"
+                    Title = "artist",
+                    Value = "artist"
                 },
                 new Choice
                 {
-                    Title = "albums",
-                    Value = "albums"
+                    Title = "track",
+                    Value = "track"
                 },
                 new Choice
                 {
-                    Title = "tracks",
-                    Value = "tracks"
-                },
-                new Choice
-                {
-                    Title = "playlists",
-                    Value = "playlists"
+                    Title = "playlist",
+                    Value = "playlist"
                 }
             };
         }
@@ -174,7 +169,7 @@ namespace MusicChatbot.Dialogs
                         {
                             Items = new List<CardElement>
                             {
-                                new AdaptiveCards.Image()
+                                new Image()
                                 {
                                     Url = contentUrl
                                 }

@@ -13,6 +13,7 @@ namespace MusicChatbot.Dialogs
     public class PlaylistDialog : IDialog<object>
     {
         const string DoneCommand = "Done";
+        List<GenreItem> genres = new List<GenreItem>();
 
         public Task StartAsync(IDialogContext context)
         {
@@ -20,11 +21,14 @@ namespace MusicChatbot.Dialogs
             return Task.CompletedTask;
         }
 
+
         Task MessageReceivedAsync(IDialogContext context, IAwaitable<object> result)
         {
-            List<string> genres = new GrooveService().GetGenres();
-            genres.Add("Done");
-            PromptDialog.Choice(context, ResumeAfterGenreAsync, genres, "Which music category?");
+            genres = new SpotifyService().GetGenres();
+            genres.Add(new GenreItem { Id = "Done", Name = "Done" });
+            var genreNames = genres.Select(genre => genre.Name).ToList().ToList();
+
+            PromptDialog.Choice(context, ResumeAfterGenreAsync, genreNames, "Which music category?");
             return Task.CompletedTask;
         }
 
@@ -82,23 +86,27 @@ namespace MusicChatbot.Dialogs
 
         List<AudioCard> GetAudioCardsForPreviews(string genre)
         {
-            var grooveSvc = new GrooveService();
-            List<Item> tracks = grooveSvc.GetTracks(genre);
+            var genreID =
+                (from genreItem in genres
+                 where genreItem.Name == genre
+                 select genreItem.Id)
+                .SingleOrDefault();
+
+            List<Track> tracks = new SpotifyService().GetTracks(genreID);
 
             var cards =
                 (from track in tracks
                  let artists =
                      string.Join(", ",
                         from artist in track.Artists
-                        select artist.Artist.Name)
-                 let preview = grooveSvc.GetPreview(track.Id)
+                        select artist.Name)
                  select new AudioCard
                  {
                      Title = track.Name,
                      Subtitle = artists,
                      Media = new List<MediaUrl>
                      {
-                         new MediaUrl(preview.Url)
+                         new MediaUrl(track.Preview_url)
                      }
                  })
                 .ToList();
