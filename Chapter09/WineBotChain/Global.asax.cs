@@ -1,12 +1,9 @@
 ﻿using Autofac;
+using Microsoft.Bot.Builder.Azure;
 using Microsoft.Bot.Builder.Dialogs;
-using Microsoft.Bot.Builder.Internals.Fibers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using Microsoft.Bot.Builder.Dialogs.Internals;
+using Microsoft.Bot.Connector;
 using System.Web.Http;
-using System.Web.Routing;
 
 namespace WineBotChain
 {
@@ -16,9 +13,18 @@ namespace WineBotChain
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
 
-            //var builder = new ContainerBuilder();
-            //builder.RegisterModule(new ReflectionSurrogateModule());
-            //builder.Update(Conversation.Container);
+            Conversation.UpdateContainer(
+                builder =>
+                {
+                    var store = new InMemoryDataStore();
+
+                    builder.Register(c => store)
+                        .Keyed<IBotDataStore<BotData>>(AzureModule.Key_DataStore)
+                        .AsSelf()
+                        .SingleInstance();
+
+                    //builder.RegisterModule(new ReflectionSurrogateModule());
+                });
         }
     }
 }

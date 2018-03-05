@@ -12,6 +12,7 @@ namespace MusicChatbot.Dialogs
     [Serializable]
     public class PlaylistDialog : IDialog<object>
     {
+
         const string DoneCommand = "Done";
         List<GenreItem> genres = new List<GenreItem>();
 

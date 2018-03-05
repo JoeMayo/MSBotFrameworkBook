@@ -8,8 +8,8 @@
     "name": "Bot"
   },
   "conversation": {
-    "id": "35hn6jf29di2"
+    "id": "4kdjia7nfa5m"
   },
   "channelId": "emulator",
-  "serviceUrl": "http://localhost:31750"
+  "serviceUrl": "http://localhost:20409"
 }
