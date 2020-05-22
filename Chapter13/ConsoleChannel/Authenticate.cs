@@ -1,5 +1,6 @@
 ﻿using Microsoft.Bot.Connector.DirectLine;
 using System.Configuration;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -21,6 +22,7 @@ namespace ConsoleChannel
                 "Type \"/exit\" to end the program\n");
             Message.WritePrompt();
 
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             string secret = ConfigurationManager.AppSettings["DirectLineSecretKey"];
             var client = new DirectLineClient(secret);
             Conversation conversation =
