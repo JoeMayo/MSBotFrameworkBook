@@ -1,5 +1,6 @@
 ﻿using Microsoft.Bot.Connector.DirectLine;
 using System.Configuration;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
